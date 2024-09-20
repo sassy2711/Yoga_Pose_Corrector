@@ -12,7 +12,7 @@ import mediapipe as mp
 import pose_equal_check as pec
 warnings.filterwarnings("ignore", category=UserWarning, module="google.protobuf.symbol_database")
 
-#In lmlist 0th cordinate is t coordinate and 1st coordinate is x coordinate.
+#In lmlist 0th cordinate is x coordinate and 1st coordinate is y coordinate.
 
 
 ptime = 0
@@ -92,6 +92,24 @@ def text_to_speech(text):
 
     except Exception as e:
         print(f"Error in text_to_speech: {e}")
+
+def get_wrong_joints(correct_landmarks, input_landmarks, threshold):
+    correct_landmark_dict = detector.map_landmarks(correct_landmarks)
+    correct_joints_dict = detector.map_joints(correct_landmark_dict)
+    input_landmark_dict = detector.map_landmarks(input_landmarks)
+    input_joints_dict = detector.map_joints(input_landmark_dict)
+    wrong_joints = []
+    for i in correct_joints_dict:
+        correct_angle = detector.calculate_angle(correct_joints_dict[i])
+        input_angle = detector.calculate_angle(input_joints_dict[i])
+        diff = correct_angle - input_angle
+        if(abs(diff)>threshold):
+            if(diff>0):
+                wrong_joints.append(i, "increase")
+            else:
+                wrong_joints.append(i, "decrease")
+    return wrong_joints
+
 text_to_speech("Program Starting.")
 
 last_Speech_time = time.time()
