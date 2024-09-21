@@ -30,11 +30,18 @@ class PoseSimilarity():
         avg_distance = total_distance / len(landmarks1)
         return avg_distance < threshold
     
-    def get_wrong_joints(self, correct_landmarks, input_landmarks, thresh):
+    def get_wrong_joints(self, asana,correct_landmarks, input_landmarks, thresh):
+        
+        
+
         correct_landmark_dict = detector.map_landmarks(correct_landmarks)
         correct_joints_dict = detector.map_joints(correct_landmark_dict)
+        correct_joints_dict=detector.get_joints_for_asana(asana,asana_to_joint,correct_joints_dict)
+
         input_landmark_dict = detector.map_landmarks(input_landmarks)
         input_joints_dict = detector.map_joints(input_landmark_dict)
+        input_joints_dict=detector.get_joints_for_asana(asana,asana_to_joint,input_joints_dict)
+
         wrong_joints = {}
         for i in correct_joints_dict:
             correct_angle = detector.calculate_angle(correct_joints_dict[i])
