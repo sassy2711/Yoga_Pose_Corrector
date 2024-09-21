@@ -107,7 +107,24 @@ class PoseDetector:
     }
         return joint_dict
 
-
+    def map_asana_joints(self):
+        asana_to_joint={}
+        asana_to_joint["pranamasana"]=["left_elbow","left_shoulder_joint","left_hip_joint","left_knee_joint"]
+        asana_to_joint["hastauttanasana"]=["left_elbow","left_shoulder_joint","left_hip_joint","left_knee_joint","neck"]
+        asana_to_joint["hastapadasana"]=["left_elbow","left_shoulder_joint","left_hip_joint","left_knee_joint"]
+        asana_to_joint["right_ashwa_sanchalanasana"]=["left_elbow","left_shoulder_joint","left_hip_joint","left_knee_joint","right_knee_joint","neck"]
+        asana_to_joint["dandasana"]=["left_elbow","left_shoulder_joint","left_hip_joint","left_knee_joint","neck"]
+        asana_to_joint["ashtanga_namaskara"]=["left_hip_joint","left_knee_joint","left_ankle_joint"]
+        asana_to_joint["bhujangasana"]=["left_elbow","left_shoulder_joint","left_hip_joint","left_knee_joint","neck"]
+        asana_to_joint["adho_mukha_svanasana"]=["left_elbow","left_shoulder_joint","left_hip_joint","left_knee_joint","neck"]
+        asana_to_joint["left_ashwa_sanchalanasana"]=["left_elbow","left_shoulder_joint","left_hip_joint","left_knee_joint","right_knee_joint","neck"]
+        return asana_to_joint
+    
+    def get_joints_for_asana(self,asana,asana_to_joint,joint_dict):
+        new_joint_dict={}
+        for i in asana_to_joint[asana]:
+            new_joint_dict[i]=joint_dict[i]
+        return new_joint_dict
     
     def calculate_angle(self, points):
         """
