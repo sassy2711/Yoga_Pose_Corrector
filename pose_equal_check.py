@@ -29,6 +29,34 @@ class PoseSimilarity():
             total_distance += self.euclidean_distance(landmarks1[i], landmarks2[i])
         avg_distance = total_distance / len(landmarks1)
         return avg_distance < threshold
+    
+    def get_wrong_joints(self, correct_landmarks, input_landmarks, thresh):
+        correct_landmark_dict = detector.map_landmarks(correct_landmarks)
+        correct_joints_dict = detector.map_joints(correct_landmark_dict)
+        input_landmark_dict = detector.map_landmarks(input_landmarks)
+        input_joints_dict = detector.map_joints(input_landmark_dict)
+        wrong_joints = {}
+        for i in correct_joints_dict:
+            correct_angle = detector.calculate_angle(correct_joints_dict[i])
+            input_angle = detector.calculate_angle(input_joints_dict[i])
+            diff = correct_angle - input_angle
+            if(abs(diff)>thresh):
+                if(diff>0):
+                    wrong_joints[i] =  (diff, correct_angle, input_angle, "increase")
+                else:
+                    wrong_joints[i] = (diff, correct_angle, input_angle, "decrease")
+        return wrong_joints
+
+def resize_image(image, max_width=800, max_height=600):
+    height, width = image.shape[:2]
+    if width > max_width or height > max_height:
+        scaling_factor = min(max_width / width, max_height / height)
+        new_size = (int(width * scaling_factor), int(height * scaling_factor))
+        return cv.resize(image, new_size)
+    return image
+
+
+
 
 if __name__ == "__main__":
     # Example usage
@@ -36,13 +64,19 @@ if __name__ == "__main__":
     
     
 
-    frame1 = cv.imread("Padmasana.jpeg")
+    # Example usage with your images
+    frame1 = cv.imread("correct_padmasana.jpeg")
+    frame1 = resize_image(frame1)
+    #cv.imshow("Without_detection", frame1_resized)
     frame1 = detector.findPose(frame1)
     lmlist1 = detector.findPosition(frame1)
-    frame2 = cv.imread("Tarun_padmasana.jpg")
+    frame2 = cv.imread("wrong_padmasana.jpeg")
+    frame2 = resize_image(frame2)
     frame2 = detector.findPose(frame2)
     lmlist2 = detector.findPosition(frame2)
-    # Example landmarks for two poses (these should be passed in from another part of your code)
+    cv.imshow("Corrected_padmasana", frame1)
+    cv.imshow("Wrong_padmasana", frame2)
+    #Example landmarks for two poses (these should be passed in from another part of your code)
     frame_rgb1 = cv.cvtColor(frame1, cv.COLOR_BGR2RGB)
     result1 = pose.process(frame_rgb1)
     landmarks1 = []
@@ -70,7 +104,10 @@ if __name__ == "__main__":
     normalized_landmarks2 = pose_sim.normalize_landmarks(lmlist2, reference_idx=0)
     
     # Compare the poses
-    are_similar = pose_sim.compare_poses(normalized_landmarks1, normalized_landmarks2, threshold=0.1)
+    wrong_joints = pose_sim.get_wrong_joints(normalized_landmarks1, normalized_landmarks2, 20)
+    for i in wrong_joints:
+        print(i, wrong_joints[i])
     ctime = time.time()
     print(ctime-ptime)
-    print("Poses are similar" if are_similar else "Poses are different")
+    #print("Poses are similar" if are_similar else "Poses are different")
+    cv.waitKey(100000)
