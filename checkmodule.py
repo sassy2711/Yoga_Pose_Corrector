@@ -13,11 +13,7 @@ import mediapipe as mp
 import pose_equal_check as pec
 warnings.filterwarnings("ignore", category=UserWarning, module="google.protobuf.symbol_database")
 
-#In lmlist 0th cordinate is x coordinate and 1st coordinate is y coordinate.
-
-
-ptime = 0
-ctime = 0 
+#In input_landmarks 0th cordinate is x coordinate and 1st coordinate is y coordinate.
 detector = pm.PoseDetector()
 mpPose = mp.solutions.pose
 pose = mpPose.Pose()   # I was getting some errors while passing the parameters here so i didn't pass them here
@@ -26,7 +22,7 @@ poseEqualityDetector = pec.PoseSimilarity()
 pygame.mixer.init()
 
 
-PoseSimilarityDetector = pec.PoseSimilarity()
+PoseSimilarity = pec.PoseSimilarity()
 # uttanasana = cv.imread("idealAsanas\ArdhaUttanasana.jpeg")
 # uttanasana = detector.findPose(uttanasana)
 # landmarks = detector.findPosition(uttanasana)
@@ -60,86 +56,71 @@ def text_to_speech(text):
         print(f"Error in text_to_speech: {e}")
 text_to_speech("Program Starting.")
 
-def angle(a,b,c):
-    a = np.array(a)
-    b = np.array(b)
-    c = np.array(c)
+# def UttanasanaCheck(input_landmarks):
+#     if len(input_landmarks)>0:
+#             #knee_angle = angle(input_landmarks[24], input_landmarks[26], input_landmarks[28])
+#             # print(knee_angle)
+#             wrong_joints = poseEqualityDetector.get_wrong_joints(Uttanasanalandmarks, input_landmarks, 20)
+#             if len(wrong_joints):
+#                 for i in wrong_joints:
+#                     print(i, wrong_joints[i])
+#                 # if knee_angle > 150:
+#                 #     text = "You are doing great baby!!"
+#                 #     # print(f'You are doing right asana perfectly your knee angle is {knee_angle}.')
+#                 #     threading.Thread(target=text_to_speech, args=(text,)).start()
+#                 # else:
+#                 #     text = "You are doing the right asana, keep your legs straight,  and your knee angle is" + knee_angle + "degrees."
+#                 #     # print(f'You are doing the right asana, keep your legs straight,  and your knee angle is {knee_angle}.')
+#                 #     threading.Thread(target=text_to_speech, args=(text,)).start()
+#             else:
+#                 text = "Your are doing it correct."
+#                 # print("Your are doing the wrong asana.")
+#                 threading.Thread(target=text_to_speech, args=(text,)).start()
 
-     # Calculate the vectors
-    ab = a-b  # Vector from shoulder to elbow
-    bc = b-c  # Vector from elbow to wrist
-
-    # Calculate the angle using the dot product
-    cosine_angle = np.dot(ab, bc) / (np.linalg.norm(ab) * np.linalg.norm(bc))
-    angle = np.arccos(cosine_angle)  # Angle in radians
-
-    return 180 - np.degrees(angle)  # Convert to degrees
-
-def UttanasanaCheck(lmlist):
-    if len(lmlist)>0:
-            #knee_angle = angle(lmlist[24], lmlist[26], lmlist[28])
-            # print(knee_angle)
-            wrong_joints = poseEqualityDetector.get_wrong_joints(Uttanasanalandmarks, lmlist, 20)
-            if len(wrong_joints):
-                for i in wrong_joints:
-                    print(i, wrong_joints[i])
-                # if knee_angle > 150:
-                #     text = "You are doing great baby!!"
-                #     # print(f'You are doing right asana perfectly your knee angle is {knee_angle}.')
-                #     threading.Thread(target=text_to_speech, args=(text,)).start()
-                # else:
-                #     text = "You are doing the right asana, keep your legs straight,  and your knee angle is" + knee_angle + "degrees."
-                #     # print(f'You are doing the right asana, keep your legs straight,  and your knee angle is {knee_angle}.')
-                #     threading.Thread(target=text_to_speech, args=(text,)).start()
-            else:
-                text = "Your are doing it correct."
-                # print("Your are doing the wrong asana.")
-                threading.Thread(target=text_to_speech, args=(text,)).start()
-
-def TadasanaCheck(lmlist):
-    if len(lmlist)>0:
-            knee_angle = angle(lmlist[24], lmlist[26], lmlist[28])
+# def TadasanaCheck(input_landmarks):
+#     if len(input_landmarks)>0:
+#             knee_angle = angle(input_landmarks[24], input_landmarks[26], input_landmarks[28])
             
-            elbow_angle = angle(lmlist[12], lmlist[14], lmlist[16])
-            # print(f'knee_angle: {knee_angle}, elbow_angle: {elbow_angle}')
-            # print(f'left_heel: {lmlist[30][1]}, left_foot_index: {lmlist[32][1]}')
-            if PoseSimilarityDetector.compare_poses(Tadasanalandmarks, lmlist):
-                # text = "You are doing right asana."
-                if(knee_angle < 165):
-                    text ="Please keep your knee straight." 
+#             elbow_angle = angle(input_landmarks[12], input_landmarks[14], input_landmarks[16])
+#             # print(f'knee_angle: {knee_angle}, elbow_angle: {elbow_angle}')
+#             # print(f'left_heel: {input_landmarks[30][1]}, left_foot_index: {input_landmarks[32][1]}')
+#             if PoseSimilarity.compare_poses(Tadasanalandmarks, input_landmarks):
+#                 # text = "You are doing right asana."
+#                 if(knee_angle < 165):
+#                     text ="Please keep your knee straight." 
                     
-                elif(elbow_angle < 165):
-                    text = "Please keep your elbow straight up."
-                    # print("Please keep your elbow straight.")
-                elif ((abs(lmlist[30][1] - lmlist[32][1]))<0.01):
-                    text = "Please try to stand on your toes."
-                    # print("Please try to stand on your toes.")
-                else:
-                    text = "You are doing great baby"
-                    # print("You are doing great baby!!")
-                threading.Thread(target=text_to_speech, args=(text,)).start()
-            else:
-                text = "You are doing wrong asana."
-                # print("Your are doing the wrong asana.")
-                if(knee_angle < 165):
-                    text ="Please keep your knee straight." 
+#                 elif(elbow_angle < 165):
+#                     text = "Please keep your elbow straight up."
+#                     # print("Please keep your elbow straight.")
+#                 elif ((abs(input_landmarks[30][1] - input_landmarks[32][1]))<0.01):
+#                     text = "Please try to stand on your toes."
+#                     # print("Please try to stand on your toes.")
+#                 else:
+#                     text = "You are doing great baby"
+#                     # print("You are doing great baby!!")
+#                 threading.Thread(target=text_to_speech, args=(text,)).start()
+#             else:
+#                 text = "You are doing wrong asana."
+#                 # print("Your are doing the wrong asana.")
+#                 if(knee_angle < 165):
+#                     text ="Please keep your knee straight." 
                     
-                elif(elbow_angle < 165):
-                    text = "Please keep your elbow straight."
-                    # print("Please keep your elbow straight.")
-                elif ((abs(lmlist[30][1] - lmlist[32][1]))<0.01):
-                    text = "Please try to stand on your toes."
-                    # print("Please try to stand on your toes.")
-                threading.Thread(target=text_to_speech, args=(text,)).start()
+#                 elif(elbow_angle < 165):
+#                     text = "Please keep your elbow straight."
+#                     # print("Please keep your elbow straight.")
+#                 elif ((abs(input_landmarks[30][1] - input_landmarks[32][1]))<0.01):
+#                     text = "Please try to stand on your toes."
+#                     # print("Please try to stand on your toes.")
+#                 threading.Thread(target=text_to_speech, args=(text,)).start()
 
 # threading.Thread(target=text_to_speech, args=("Keep going!",)).start()
 last_check_time = time.time()
 vid = cv.VideoCapture(1)
 while True:
-    isTrue, frame = vid.read()
+    isTrue, input_frame = vid.read()
     
     if isTrue:
-        original_height, original_width = frame.shape[:2]
+        original_height, original_width = input_frame.shape[:2]
 
         # Define a scale factor (e.g., 0.5 for half the size)
         scale_factor = 1.5
@@ -148,29 +129,46 @@ while True:
         new_width = int(original_width * scale_factor)
         new_height = int(original_height * scale_factor)
         
-        # Resize the frame while maintaining the aspect ratio
-        frame = cv.resize(frame, (new_width, new_height), interpolation=cv.INTER_AREA)
+        # Resize the input_frame while maintaining the aspect ratio
+        input_frame = cv.resize(input_frame, (new_width, new_height), interpolation=cv.INTER_AREA)
 
 
-        frame = detector.findPose(frame)
-        lmlist = detector.findPosition(frame)
+        input_frame = detector.findPose(input_frame)
+        input_landmarks = detector.findPosition(input_frame)
 
         current_time = time.time()
-        if((current_time-last_check_time)>5 and len(lmlist)>0):
-            # print("Creating Thread")
-            UttanasanaCheck(lmlist)
+        pose_name = "pranamasana"
+        if((current_time-last_check_time)>3 and len(input_landmarks)>0):
             last_check_time = current_time
+            (isSimilar, correct_landmarks) = PoseSimilarity.isSimilar(pose_name, input_landmarks, 0.1)
+            if(isSimilar):
+                wrong_joints = PoseSimilarity.get_wrong_joints(pose_name, correct_landmarks, input_landmarks, 30)
+                if(len(wrong_joints) == 0):
+                    text = "You're doing it absolutely right."
+                    threading.Thread(target=text_to_speech, args=(text,)).start()
+                else:
+                    text = []
+                    for i in wrong_joints:
+                        text.append(wrong_joints[i][1] + "angle at" + wrong_joints[i][0])
+                    for i in text:
+                        threading.Thread(target=text_to_speech, args=(i,)).start()
+                    print(text)
+            else:
+                text = "Mu me lele."
+                threading.Thread(target=text_to_speech, args=(text,)).start()
+                
+                
 
-        ctime = time.time()
-        fps = 1/(ctime-ptime)
-        ptime = ctime
-        cv.putText(frame, str(f'{int(fps)} FPS'), (30, 40), cv.FONT_HERSHEY_PLAIN, 1.7, (0,255,0), thickness=3)
-        # webImg = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+        # ctime = time.time()
+        # fps = 1/(ctime-ptime)
+        # ptime = ctime
+        # cv.putText(input_frame, str(f'{int(fps)} FPS'), (30, 40), cv.FONT_HERSHEY_PLAIN, 1.7, (0,255,0), thickness=3)
+        # webImg = cv.cvtColor(input_frame, cv.COLOR_BGR2RGB)
         # img_placeholder.image(webImg, caption="MYImage")
 
         
          
-        cv.imshow('Video', frame)
+        cv.imshow('Video', input_frame)
 
         if cv.waitKey(10) and 0xFF == ord('q'):
             break
