@@ -4,7 +4,7 @@ import time
 import numpy as np
 
 
-class PoseDetector():
+class PoseDetector:
     def __init__(self, mode=False, upBody=False, smooth=True,
                   detectionCon = 0.5, trackCon=0.5):
         self.mode = mode
@@ -49,7 +49,7 @@ class PoseDetector():
         
         return frame
     
-    def map_landmarks(landmarks):
+    def map_landmarks(self, landmarks):
         landmark_dict = {
         'nose': landmarks[0],
         'left_eye_inner': landmarks[1],
@@ -68,49 +68,48 @@ class PoseDetector():
         'right_elbow': landmarks[14],
         'left_wrist': landmarks[15],
         'right_wrist': landmarks[16],
-        'left_hip': landmarks[17],
-        'right_hip': landmarks[18],
-        'left_knee': landmarks[19],
-        'right_knee': landmarks[20],
-        'left_ankle': landmarks[21],
-        'right_ankle': landmarks[22],
-        'left_foot_index': landmarks[23],
-        'right_foot_index': landmarks[24],
-        'left_foot_outer': landmarks[25],
-        'right_foot_outer': landmarks[26],
-        'left_big_toe': landmarks[27],
-        'right_big_toe': landmarks[28],
+        'left_pinky': landmarks[17],
+        'right_pinky': landmarks[18],
+        'left_index': landmarks[19],
+        'right_index': landmarks[20],
+        'left_thumb': landmarks[21],
+        'right_thumb': landmarks[22],
+        'left_hip': landmarks[23],
+        'right_hip': landmarks[24],
+        'left_knee': landmarks[25],
+        'right_knee': landmarks[26],
+        'left_ankle': landmarks[27],
+        'right_ankle': landmarks[28],
         'left_heel': landmarks[29],
         'right_heel': landmarks[30],
-        'left_foot_arch': landmarks[31],
-        'right_foot_arch': landmarks[32],
-        'mid_hip': ((landmarks[17][0]+landmarks[18][0])/2, (landmarks[17][1]+landmarks[18][1])/2),
+        'left_foot_index': landmarks[31],
+        'right_foot_index': landmarks[32],
+        'mid_hip': ((landmarks[23][0]+landmarks[24][0])/2, (landmarks[23][1]+landmarks[24][1])/2),
         'neck': ((landmarks[11][0]+landmarks[12][0])/2, (landmarks[11][1]+landmarks[12][1])/2)
+        
     }
         return landmark_dict
     
-    def map_joints():
+    def map_joints(self, landmark_dict):
         joint_dict = {
-    "left_knee_joint": ["left_ankle", "left_knee", "left_hip"],
-    "right_knee_joint": ["right_ankle", "right_knee", "right_hip"],
-    "left_hip_joint": ["left_knee", "left_hip", "left_shoulder"],
-    "right_hip_joint": ["right_knee", "right_hip", "right_shoulder"],
-    "left_shoulder_joint": ["left_elbow", "left_shoulder", "left_hip"],
-    "right_shoulder_joint": ["right_elbow", "right_shoulder", "right_hip"],
-    "neck": ["mid_hip", "neck", "nose"],
-    "leg_angle": ["left_knee", "mid_hip", "right_knee"]
+        "left_knee_joint": [landmark_dict['left_ankle'], landmark_dict['left_knee'], landmark_dict['left_hip']],
+        "right_knee_joint": [landmark_dict['right_ankle'], landmark_dict['right_knee'], landmark_dict['right_hip']],
+        "left_hip_joint": [landmark_dict['left_knee'], landmark_dict['left_hip'], landmark_dict['left_shoulder']],
+        "right_hip_joint": [landmark_dict['right_knee'], landmark_dict['right_hip'], landmark_dict['right_shoulder']],
+        "left_shoulder_joint": [landmark_dict['left_elbow'], landmark_dict['left_shoulder'], landmark_dict['left_hip']],
+        "right_shoulder_joint": [landmark_dict['right_elbow'], landmark_dict['right_shoulder'], landmark_dict['right_hip']],
+        "neck": [landmark_dict['mid_hip'], landmark_dict['neck'], landmark_dict['nose']],
+        "leg_angle": [landmark_dict['left_knee'], landmark_dict['mid_hip'], landmark_dict['right_knee']],
+        "left_ankle_joint": [landmark_dict['left_knee'], landmark_dict['left_ankle'], landmark_dict['left_foot_index']],
+        "right_ankle_joint": [landmark_dict['right_knee'], landmark_dict['right_ankle'], landmark_dict['right_foot_index']],
+        "left_elbow": (landmark_dict['left_shoulder'], landmark_dict['left_elbow'], landmark_dict['left_wrist']),
+        "right_elbow": (landmark_dict['right_shoulder'], landmark_dict['right_elbow'], landmark_dict['right_wrist'])
     }
         return joint_dict
 
-class Angles:
-    landmarks_dict = {}
-    joints_dict = {}
+
     
-    def __init__(self,  landmark_dict, joints_dict):
-        self.landmark_dict = landmark_dict
-        self.joints_dict = joints_dict
-    
-    def calculate_angle(points):
+    def calculate_angle(self, points):
         """
         Calculate the angle between three points a, b, and c.
         a: The first point (shoulder).
@@ -123,31 +122,24 @@ class Angles:
             c = np.array(points[2])  # Wrist
 
         # Calculate the vectors
-            ab = b - a  # Vector from shoulder to elbow
+            ba = a - b  # Vector from shoulder to elbow
             bc = c - b  # Vector from elbow to wrist
 
                 # Calculate the angle using the dot product
-            cosine_angle = np.dot(ab, bc) / (np.linalg.norm(ab) * np.linalg.norm(bc))
+            cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
             angle = np.arccos(cosine_angle)  # Angle in radians
 
             return np.degrees(angle)  # Convert to degrees
         else:
             print("No points given")
+    
+    
 
-    def get_joint_points(self, joint):
-        """
-        Given the joint name, return the indices of the three landmarks
-        required to calculate the angle at that joint.
-        """
-        if joint in self.joints_dict:
-            points = self.joints_dict[joint]
-            return [self.landmarks_dict[point] for point in points]
-        else:
-            print("Joint not in dict.")
-            return None
+    
 
 
 
+        
             
 
 
