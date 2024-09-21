@@ -65,17 +65,17 @@ if __name__ == "__main__":
     
 
     # Example usage with your images
-    frame1 = cv.imread("correct_padmasana.jpeg")
+    frame1 = cv.imread("Padmasana.jpeg")
     frame1 = resize_image(frame1)
     #cv.imshow("Without_detection", frame1_resized)
     frame1 = detector.findPose(frame1)
     lmlist1 = detector.findPosition(frame1)
-    frame2 = cv.imread("wrong_padmasana.jpeg")
+    frame2 = cv.imread("correct_padmasana.jpeg")
     frame2 = resize_image(frame2)
     frame2 = detector.findPose(frame2)
     lmlist2 = detector.findPosition(frame2)
-    cv.imshow("Corrected_padmasana", frame1)
-    cv.imshow("Wrong_padmasana", frame2)
+    #cv.imshow("Corrected_padmasana", frame1)
+    #cv.imshow("Wrong_padmasana", frame2)
     #Example landmarks for two poses (these should be passed in from another part of your code)
     frame_rgb1 = cv.cvtColor(frame1, cv.COLOR_BGR2RGB)
     result1 = pose.process(frame_rgb1)
@@ -91,10 +91,10 @@ if __name__ == "__main__":
         for lm in result2.pose_landmarks.landmark:
             landmarks2.append((lm.x, lm.y))
     
-    print("landmarks1: ", landmarks1)
-    print("lmlist1: ", lmlist1)
-    print("landmarks2: ", landmarks2)
-    print("lmlist2: ", lmlist2)
+    # print("landmarks1: ", landmarks1)
+    # print("lmlist1: ", lmlist1)
+    # print("landmarks2: ", landmarks2)
+    # print("lmlist2: ", lmlist2)
 
 
 
@@ -105,9 +105,11 @@ if __name__ == "__main__":
     
     # Compare the poses
     wrong_joints = pose_sim.get_wrong_joints(normalized_landmarks1, normalized_landmarks2, 20)
-    for i in wrong_joints:
-        print(i, wrong_joints[i])
+    if(pose_sim.compare_poses(normalized_landmarks1, normalized_landmarks2, 0.1)):
+        print("Correct")
+    else:
+        for i in wrong_joints:
+            print(i, wrong_joints[i])
     ctime = time.time()
     print(ctime-ptime)
     #print("Poses are similar" if are_similar else "Poses are different")
-    cv.waitKey(100000)
