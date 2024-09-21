@@ -5,10 +5,12 @@ import numpy as np
 import time
 import PoseModule as pm
 # Initialize MediaPipe Pose Detection
+ideal_landmarks = {}
 detector = pm.PoseDetector()
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose()
 mp_drawing = mp.solutions.drawing_utils
+asana_to_joint = detector.map_asana_joints()
 ctime =0
 ptime = time.time()
 class PoseSimilarity():
@@ -28,12 +30,9 @@ class PoseSimilarity():
         for i in range(len(landmarks1)):
             total_distance += self.euclidean_distance(landmarks1[i], landmarks2[i])
         avg_distance = total_distance / len(landmarks1)
-        return avg_distance < threshold
+        return avg_distance
     
-    def get_wrong_joints(self, asana,correct_landmarks, input_landmarks, thresh):
-        
-        
-
+    def get_wrong_joints(self, asana, correct_landmarks, input_landmarks, thresh):
         correct_landmark_dict = detector.map_landmarks(correct_landmarks)
         correct_joints_dict = detector.map_joints(correct_landmark_dict)
         correct_joints_dict=detector.get_joints_for_asana(asana,asana_to_joint,correct_joints_dict)
@@ -53,6 +52,21 @@ class PoseSimilarity():
                 else:
                     wrong_joints[i] = (diff, correct_angle, input_angle, "decrease")
         return wrong_joints
+    
+    def isCorrect(pose_name, input_landmarks, euclidean_threshold, angular_threshold):
+        correct_landmarks = ideal_landmarks[pose_name]
+        mini = float('inf')
+        closest_landmarks = []
+        for i in correct_landmarks:
+            dist = pose_sim.compare_poses(i, input_landmarks, euclidean_threshold)
+            if(dist<euclidean_threshold):
+                print("Youre doing it right.")
+                return []
+            if(dist<mini):
+                mini = dist
+                closest_landmarks = i
+        return pose_sim.get_wrong_joints(pose_name, closest_landmarks, input_landmarks, angular_threshold)
+        
 
 def resize_image(image, max_width=800, max_height=600):
     height, width = image.shape[:2]
