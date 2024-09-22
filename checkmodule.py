@@ -115,7 +115,7 @@ text_to_speech("Program Starting.")
 
 # threading.Thread(target=text_to_speech, args=("Keep going!",)).start()
 last_check_time = time.time()
-vid = cv.VideoCapture(0)
+vid = cv.VideoCapture(1)
 while True:
     isTrue, input_frame = vid.read()
     
@@ -140,12 +140,12 @@ while True:
         input_landmarks = PoseSimilarity.normalize_landmarks(input_landmarks, reference_idx=0)
 
         current_time = time.time()
-        pose_name = "hastapadasana"
+        pose_name = "dandasana"
         if((current_time-last_check_time)>5 and len(input_landmarks)>0):
             last_check_time = current_time
-            (isSimilar, correct_landmarks) = PoseSimilarity.isSimilar(pose_name, input_landmarks, 0.1)
+            (isSimilar, correct_landmarks) = PoseSimilarity.isSimilar(pose_name, input_landmarks, 0.2)
             if(isSimilar):
-                wrong_joints = PoseSimilarity.get_wrong_joints(pose_name, correct_landmarks, input_landmarks, 10)
+                wrong_joints = PoseSimilarity.get_wrong_joints(pose_name, correct_landmarks, input_landmarks, 15)
                 if(len(wrong_joints) == 0):
                     text = "You're doing it absolutely right."
                     threading.Thread(target=text_to_speech, args=(text,)).start()

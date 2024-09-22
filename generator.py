@@ -79,10 +79,10 @@ if __name__ == "__main__":
     # Example usage with your images
     # for i in orientations:
     # for asana in poses_names:
-    asana="parvatasana"
+    asana="adho_mukha_svanasana"
     print("ideal_landmarks["+'"'+asana+'"'+"] = []")
-    for i in range(3):
-        frame1 = cv.imread(asana+"("+str(i+1)+")"+".jpg")
+    for i in range(6):
+        frame1 = cv.imread(asana+"("+str(i+4)+")"+".jpeg")
         # if(i == 0):
         #     frame1 = cv.imread(asana+"("+str(i+1)+")"+".jpg")
         # else:
@@ -92,7 +92,7 @@ if __name__ == "__main__":
         frame1 = detector.findPose(frame1)
         lmlist1 = detector.findPosition(frame1)
         normalized_landmarks1 = pose_sim.normalize_landmarks(lmlist1, reference_idx=0)
-        print("absolutely_ideal_landmarks["+'"'+asana+'"'+"].append("+str(normalized_landmarks1)+")")
+        print("ideal_landmarks["+'"'+asana+'"'+"].append("+str(normalized_landmarks1)+")")
         print("\n")
     #     lmlists.append(lmlist1)
     # asanas_dict[asana]=lmlists
