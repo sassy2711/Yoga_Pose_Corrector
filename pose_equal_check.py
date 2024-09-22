@@ -32,7 +32,7 @@ class PoseSimilarity():
         for i in range(len(landmarks1)):
             total_distance += self.euclidean_distance(landmarks1[i], landmarks2[i])
         avg_distance = total_distance / len(landmarks1)
-        return avg_distance
+        return avg_distance<threshold
     
     def get_wrong_joints(self, asana, correct_landmarks, input_landmarks, thresh):
         correct_landmark_dict = detector.map_landmarks(correct_landmarks)
