@@ -34,15 +34,19 @@ Ensure you have the following installed:
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/sassy2711/Yoga_Pose_Corrector.git
-   cd Yoga_Pose_Corrector
    ```
 
 2. **Install Python dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
+   
+3. **Navigate into project directory**:
+   ```bash
+   cd Yoga_Pose_Corrector
+   ```
 
-3. **Run the application**:
+4. **Run the application**:
    ```bash
    python main.py
    ```
