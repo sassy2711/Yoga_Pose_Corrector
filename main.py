@@ -115,7 +115,7 @@ text_to_speech("Program Starting.")
 
 # threading.Thread(target=text_to_speech, args=("Keep going!",)).start()
 last_check_time = time.time()
-vid = cv.VideoCapture(1)
+vid = cv.VideoCapture(0)
 while True:
     isTrue, input_frame = vid.read()
     
@@ -140,7 +140,7 @@ while True:
         input_landmarks = PoseSimilarity.normalize_landmarks(input_landmarks, reference_idx=0)
 
         current_time = time.time()
-        pose_name = "dandasana"
+        pose_name = "pranamasana"
         if((current_time-last_check_time)>5 and len(input_landmarks)>0):
             last_check_time = current_time
             (isSimilar, correct_landmarks) = PoseSimilarity.isSimilar(pose_name, input_landmarks, 0.1)
@@ -152,10 +152,11 @@ while True:
                 else:
                     text = []
                     for i in wrong_joints:
-                        text.append(wrong_joints[i][1] + "angle at" + wrong_joints[i][0])
+                        joint = wrong_joints[i][0]
+                        change = wrong_joints[i][1]
+                        text.append(change + "angle at" + " ".join((joint.split("_"))))
                     for i in text:
                         threading.Thread(target=text_to_speech, args=(i,)).start()
-                    print(text)
             else:
                 text = "Thoda galat."
                 threading.Thread(target=text_to_speech, args=(text,)).start()
