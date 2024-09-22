@@ -54,68 +54,19 @@ def text_to_speech(text):
 
     except Exception as e:
         print(f"Error in text_to_speech: {e}")
+
+
+def menu():
+    print("Choose an asana:")
+    print("1. pranamasana\n2. hastauttanasana\n3. hastapadasana\n4. right_ashwa_sanchalanasana\n5. left_ashwa_sanchalanasana\n6. dandasana\n7. ashtanga_namaskara\n8. bhujangasana \n9. adho_mukha_svanasana")
+
 text_to_speech("Program Starting.")
 
-# def UttanasanaCheck(input_landmarks):
-#     if len(input_landmarks)>0:
-#             #knee_angle = angle(input_landmarks[24], input_landmarks[26], input_landmarks[28])
-#             # print(knee_angle)
-#             wrong_joints = poseEqualityDetector.get_wrong_joints(Uttanasanalandmarks, input_landmarks, 20)
-#             if len(wrong_joints):
-#                 for i in wrong_joints:
-#                     print(i, wrong_joints[i])
-#                 # if knee_angle > 150:
-#                 #     text = "You are doing great baby!!"
-#                 #     # print(f'You are doing right asana perfectly your knee angle is {knee_angle}.')
-#                 #     threading.Thread(target=text_to_speech, args=(text,)).start()
-#                 # else:
-#                 #     text = "You are doing the right asana, keep your legs straight,  and your knee angle is" + knee_angle + "degrees."
-#                 #     # print(f'You are doing the right asana, keep your legs straight,  and your knee angle is {knee_angle}.')
-#                 #     threading.Thread(target=text_to_speech, args=(text,)).start()
-#             else:
-#                 text = "Your are doing it correct."
-#                 # print("Your are doing the wrong asana.")
-#                 threading.Thread(target=text_to_speech, args=(text,)).start()
-
-# def TadasanaCheck(input_landmarks):
-#     if len(input_landmarks)>0:
-#             knee_angle = angle(input_landmarks[24], input_landmarks[26], input_landmarks[28])
-            
-#             elbow_angle = angle(input_landmarks[12], input_landmarks[14], input_landmarks[16])
-#             # print(f'knee_angle: {knee_angle}, elbow_angle: {elbow_angle}')
-#             # print(f'left_heel: {input_landmarks[30][1]}, left_foot_index: {input_landmarks[32][1]}')
-#             if PoseSimilarity.compare_poses(Tadasanalandmarks, input_landmarks):
-#                 # text = "You are doing right asana."
-#                 if(knee_angle < 165):
-#                     text ="Please keep your knee straight." 
-                    
-#                 elif(elbow_angle < 165):
-#                     text = "Please keep your elbow straight up."
-#                     # print("Please keep your elbow straight.")
-#                 elif ((abs(input_landmarks[30][1] - input_landmarks[32][1]))<0.01):
-#                     text = "Please try to stand on your toes."
-#                     # print("Please try to stand on your toes.")
-#                 else:
-#                     text = "You are doing great baby"
-#                     # print("You are doing great baby!!")
-#                 threading.Thread(target=text_to_speech, args=(text,)).start()
-#             else:
-#                 text = "You are doing wrong asana."
-#                 # print("Your are doing the wrong asana.")
-#                 if(knee_angle < 165):
-#                     text ="Please keep your knee straight." 
-                    
-#                 elif(elbow_angle < 165):
-#                     text = "Please keep your elbow straight."
-#                     # print("Please keep your elbow straight.")
-#                 elif ((abs(input_landmarks[30][1] - input_landmarks[32][1]))<0.01):
-#                     text = "Please try to stand on your toes."
-#                     # print("Please try to stand on your toes.")
-#                 threading.Thread(target=text_to_speech, args=(text,)).start()
-
-# threading.Thread(target=text_to_speech, args=("Keep going!",)).start()
+# menu()
+# pose_name = input()
 last_check_time = time.time()
 vid = cv.VideoCapture(0)
+
 while True:
     isTrue, input_frame = vid.read()
     
@@ -138,9 +89,8 @@ while True:
         if(len(input_landmarks) == 0):
             continue
         input_landmarks = PoseSimilarity.normalize_landmarks(input_landmarks, reference_idx=0)
-
+        pose_name = "hastapadasana"
         current_time = time.time()
-        pose_name = "pranamasana"
         if((current_time-last_check_time)>5 and len(input_landmarks)>0):
             last_check_time = current_time
             (isSimilar, correct_landmarks) = PoseSimilarity.isSimilar(pose_name, input_landmarks, 0.1)

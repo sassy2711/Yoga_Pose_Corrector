@@ -58,7 +58,7 @@ class PoseSimilarity():
         return wrong_joints
     
     def isSimilar(self, pose_name, input_landmarks, euclidean_threshold):
-        correct_landmarks = ideal_landmarks[pose_name]
+        correct_landmarks = ideal_landmarks[pose_name] + absolutely_ideal_landmarks[pose_name]
         mini = float('inf')
         closest_landmarks = []
         flag = 0
@@ -70,6 +70,7 @@ class PoseSimilarity():
             if(dist<mini):
                 mini = dist
                 closest_landmarks = i
+        
         if(flag):
             return (True, closest_landmarks)
         else:            
