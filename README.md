@@ -46,8 +46,9 @@ Ensure you have the following installed:
    cd Yoga_Pose_Corrector
    ```
 
-4. **Run the application**:
+4. **Running the backend**:
    ```bash
+   cd backend
    python main.py
    ```
 
