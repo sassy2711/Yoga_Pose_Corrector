@@ -79,7 +79,7 @@ if __name__ == "__main__":
     # Example usage with your images
     # for i in orientations:
     # for asana in poses_names:
-    asana="adho_mukha_svanasana"
+    asana="ashtanga_namaskara"
     print("ideal_landmarks["+'"'+asana+'"'+"] = []")
     for i in range(6):
         frame1 = cv.imread(asana+"("+str(i+4)+")"+".jpeg")

@@ -143,7 +143,7 @@ while True:
         pose_name = "dandasana"
         if((current_time-last_check_time)>5 and len(input_landmarks)>0):
             last_check_time = current_time
-            (isSimilar, correct_landmarks) = PoseSimilarity.isSimilar(pose_name, input_landmarks, 0.2)
+            (isSimilar, correct_landmarks) = PoseSimilarity.isSimilar(pose_name, input_landmarks, 0.1)
             if(isSimilar):
                 wrong_joints = PoseSimilarity.get_wrong_joints(pose_name, correct_landmarks, input_landmarks, 15)
                 if(len(wrong_joints) == 0):
