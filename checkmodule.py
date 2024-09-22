@@ -115,7 +115,7 @@ text_to_speech("Program Starting.")
 
 # threading.Thread(target=text_to_speech, args=("Keep going!",)).start()
 last_check_time = time.time()
-vid = cv.VideoCapture(1)
+vid = cv.VideoCapture(0)
 while True:
     isTrue, input_frame = vid.read()
     
@@ -135,14 +135,17 @@ while True:
 
         input_frame = detector.findPose(input_frame)
         input_landmarks = detector.findPosition(input_frame)
+        if(len(input_landmarks) == 0):
+            continue
+        input_landmarks = PoseSimilarity.normalize_landmarks(input_landmarks, reference_idx=0)
 
         current_time = time.time()
-        pose_name = "pranamasana"
-        if((current_time-last_check_time)>3 and len(input_landmarks)>0):
+        pose_name = "hastapadasana"
+        if((current_time-last_check_time)>5 and len(input_landmarks)>0):
             last_check_time = current_time
             (isSimilar, correct_landmarks) = PoseSimilarity.isSimilar(pose_name, input_landmarks, 0.1)
             if(isSimilar):
-                wrong_joints = PoseSimilarity.get_wrong_joints(pose_name, correct_landmarks, input_landmarks, 30)
+                wrong_joints = PoseSimilarity.get_wrong_joints(pose_name, correct_landmarks, input_landmarks, 10)
                 if(len(wrong_joints) == 0):
                     text = "You're doing it absolutely right."
                     threading.Thread(target=text_to_speech, args=(text,)).start()
@@ -154,7 +157,7 @@ while True:
                         threading.Thread(target=text_to_speech, args=(i,)).start()
                     print(text)
             else:
-                text = "Mu me lele."
+                text = "Thoda galat."
                 threading.Thread(target=text_to_speech, args=(text,)).start()
                 
                 

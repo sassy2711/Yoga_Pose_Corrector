@@ -5,18 +5,14 @@ import numpy as np
 import time
 import PoseModule as pm
 # Initialize MediaPipe Pose Detection
-import ideal_landmarks_data
-import absolutely_ideal_landmarks_data
-
-ideal_landmarks = ideal_landmarks_data.ideal_landmarks
-absolutely_ideal_landmarks = absolutely_ideal_landmarks_data.absolutely_ideal_landmarks
 detector = pm.PoseDetector()
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose()
 mp_drawing = mp.solutions.drawing_utils
-asana_to_joint = detector.map_asana_joints()
 ctime =0
 ptime = time.time()
+poses_names=["pranamasana","hastauttanasana","hastapadasana","right_ashwa_sanchalanasana","dandasana","ashtanga_namaskara","bhujangasana","adho_mukha_svanasana","ashwa_sanchalanasana"]
+asana_to_joint=detector.map_asana_joints()
 class PoseSimilarity():
     # Function to calculate Euclidean distance between two points
     def euclidean_distance(self, point1, point2):
@@ -29,14 +25,17 @@ class PoseSimilarity():
         return normalized_landmarks
     
     # Function to compare two sets of pose landmarks
-    def compare_poses(self, landmarks1, landmarks2, threshold=0.1):
+    def compare_poses(self, landmarks1, landmarks2):
         total_distance = 0
         for i in range(len(landmarks1)):
             total_distance += self.euclidean_distance(landmarks1[i], landmarks2[i])
         avg_distance = total_distance / len(landmarks1)
-        return avg_distance<threshold
+        return avg_distance
     
-    def get_wrong_joints(self, asana, correct_landmarks, input_landmarks, thresh):
+    def get_wrong_joints(self, asana,correct_landmarks, input_landmarks, thresh):
+        
+        
+
         correct_landmark_dict = detector.map_landmarks(correct_landmarks)
         correct_joints_dict = detector.map_joints(correct_landmark_dict)
         correct_joints_dict=detector.get_joints_for_asana(asana,asana_to_joint,correct_joints_dict)
@@ -52,30 +51,10 @@ class PoseSimilarity():
             diff = correct_angle - input_angle
             if(abs(diff)>thresh):
                 if(diff>0):
-                    wrong_joints[i] =  (i, "increase")
+                    wrong_joints[i] =  (diff, correct_angle, input_angle, "increase")
                 else:
-                    wrong_joints[i] = (i, "decrease")
+                    wrong_joints[i] = (diff, correct_angle, input_angle, "decrease")
         return wrong_joints
-    
-    def isSimilar(self, pose_name, input_landmarks, euclidean_threshold):
-        correct_landmarks = ideal_landmarks[pose_name]
-        mini = float('inf')
-        closest_landmarks = []
-        flag = 0
-        for i in correct_landmarks:
-            dist = self.compare_poses(i, input_landmarks, euclidean_threshold)
-            if(dist<euclidean_threshold):
-                print("You're doing it right.")
-                flag = 1
-            if(dist<mini):
-                mini = dist
-                closest_landmarks = i
-        if(flag):
-            return (True, closest_landmarks)
-        else:            
-            return (False, closest_landmarks)
-        #return self.get_wrong_joints(pose_name, closest_landmarks, input_landmarks, angular_threshold)
-        
 
 def resize_image(image, max_width=800, max_height=600):
     height, width = image.shape[:2]
@@ -93,19 +72,36 @@ if __name__ == "__main__":
     pose_sim = PoseSimilarity()
     
     
-
+    #asana=input()
+    # orientations=["_straight","_left","_right"]
+    # asanas_dict={}
+    # lmlists=[]
     # Example usage with your images
-    frame1 = cv.imread("Padmasana.jpeg")
-    frame1 = resize_image(frame1)
+    # for i in orientations:
+    # for asana in poses_names:
+    asana="parvatasana"
+    print("ideal_landmarks["+'"'+asana+'"'+"] = []")
+    for i in range(3):
+        frame1 = cv.imread(asana+"("+str(i+1)+")"+".jpg")
+        # if(i == 0):
+        #     frame1 = cv.imread(asana+"("+str(i+1)+")"+".jpg")
+        # else:
+        #     frame1 = cv.imread(asana+"("+str(i+1)+")"+".jpeg")
+        frame1 = resize_image(frame1)
     #cv.imshow("Without_detection", frame1_resized)
-    frame1 = detector.findPose(frame1)
-    lmlist1 = detector.findPosition(frame1)
-    frame2 = cv.imread("correct_padmasana.jpeg")
+        frame1 = detector.findPose(frame1)
+        lmlist1 = detector.findPosition(frame1)
+        normalized_landmarks1 = pose_sim.normalize_landmarks(lmlist1, reference_idx=0)
+        print("absolutely_ideal_landmarks["+'"'+asana+'"'+"].append("+str(normalized_landmarks1)+")")
+        print("\n")
+    #     lmlists.append(lmlist1)
+    # asanas_dict[asana]=lmlists
+    frame2 = cv.imread("wrong_padmasana.jpeg")
     frame2 = resize_image(frame2)
     frame2 = detector.findPose(frame2)
     lmlist2 = detector.findPosition(frame2)
-    #cv.imshow("Corrected_padmasana", frame1)
-    #cv.imshow("Wrong_padmasana", frame2)
+    cv.imshow("Corrected_padmasana", frame1)
+    cv.imshow("Wrong_padmasana", frame2)
     #Example landmarks for two poses (these should be passed in from another part of your code)
     frame_rgb1 = cv.cvtColor(frame1, cv.COLOR_BGR2RGB)
     result1 = pose.process(frame_rgb1)
@@ -135,11 +131,9 @@ if __name__ == "__main__":
     
     # Compare the poses
     wrong_joints = pose_sim.get_wrong_joints(normalized_landmarks1, normalized_landmarks2, 20)
-    if(pose_sim.compare_poses(normalized_landmarks1, normalized_landmarks2, 0.1)):
-        print("Correct")
-    else:
-        for i in wrong_joints:
-            print(i, wrong_joints[i])
+    for i in wrong_joints:
+        print(i, wrong_joints[i])
     ctime = time.time()
     print(ctime-ptime)
-
+    #print("Poses are similar" if are_similar else "Poses are different")
+    cv.waitKey(100000)
