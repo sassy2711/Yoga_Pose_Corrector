@@ -6,8 +6,10 @@ import time
 import PoseModule as pm
 # Initialize MediaPipe Pose Detection
 import ideal_landmarks_data
+import absolutely_ideal_landmarks_data
 
 ideal_landmarks = ideal_landmarks_data.ideal_landmarks
+absolutely_ideal_landmarks = absolutely_ideal_landmarks_data.absolutely_ideal_landmarks
 detector = pm.PoseDetector()
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose()

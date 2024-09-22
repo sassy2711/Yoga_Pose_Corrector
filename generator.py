@@ -79,16 +79,20 @@ if __name__ == "__main__":
     # Example usage with your images
     # for i in orientations:
     # for asana in poses_names:
-    asana="hastapadasana"
+    asana="parvatasana"
     print("ideal_landmarks["+'"'+asana+'"'+"] = []")
     for i in range(3):
-        frame1 = cv.imread(asana+"("+(i+1)+")"+".png")
+        frame1 = cv.imread(asana+"("+str(i+1)+")"+".jpg")
+        # if(i == 0):
+        #     frame1 = cv.imread(asana+"("+str(i+1)+")"+".jpg")
+        # else:
+        #     frame1 = cv.imread(asana+"("+str(i+1)+")"+".jpeg")
         frame1 = resize_image(frame1)
     #cv.imshow("Without_detection", frame1_resized)
         frame1 = detector.findPose(frame1)
         lmlist1 = detector.findPosition(frame1)
         normalized_landmarks1 = pose_sim.normalize_landmarks(lmlist1, reference_idx=0)
-        print("ideal_landmarks["+'"'+asana+'"'+"].append("+str(normalized_landmarks1)+")")
+        print("absolutely_ideal_landmarks["+'"'+asana+'"'+"].append("+str(normalized_landmarks1)+")")
         print("\n")
     #     lmlists.append(lmlist1)
     # asanas_dict[asana]=lmlists
@@ -113,10 +117,10 @@ if __name__ == "__main__":
         for lm in result2.pose_landmarks.landmark:
             landmarks2.append((lm.x, lm.y))
     
-    print("landmarks1: ", landmarks1)
-    print("lmlist1: ", lmlist1)
-    print("landmarks2: ", landmarks2)
-    print("lmlist2: ", lmlist2)
+    # print("landmarks1: ", landmarks1)
+    # print("lmlist1: ", lmlist1)
+    # print("landmarks2: ", landmarks2)
+    # print("lmlist2: ", lmlist2)
 
 
 
