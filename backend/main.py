@@ -62,8 +62,8 @@ def menu():
 
 text_to_speech("Program Starting.")
 
-# menu()
-# pose_name = input()
+menu()
+pose_name = input()
 last_check_time = time.time()
 vid = cv.VideoCapture(0)
 
@@ -89,7 +89,7 @@ while True:
         if(len(input_landmarks) == 0):
             continue
         input_landmarks = PoseSimilarity.normalize_landmarks(input_landmarks, reference_idx=0)
-        pose_name = "hastapadasana"
+        # pose_name = "hastapadasana"
         current_time = time.time()
         if((current_time-last_check_time)>5 and len(input_landmarks)>0):
             last_check_time = current_time
