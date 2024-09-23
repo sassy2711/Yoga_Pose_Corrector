@@ -35,17 +35,14 @@ Ensure you have the following installed:
       ```bash
       git clone https://github.com/sassy2711/Yoga_Pose_Corrector.git
       ```
-
-   2. **Install Python dependencies**:
-      ```bash
-      pip install -r requirements.txt
-      ```
-   
-   3. **Navigate into project directory**:
+   2. **Navigate into project directory**:
       ```bash
       cd Yoga_Pose_Corrector
       ```
-
+   3. **Install Python dependencies**:
+      ```bash
+      pip install -r requirements.txt
+      ```
    4. **Running the backend**:
       ```bash
       cd backend
