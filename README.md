@@ -30,36 +30,48 @@ Ensure you have the following installed:
 - pip
 
 ### Installation
+   **Backend**
+   1. **Clone the repository**:
+      ```bash
+      git clone https://github.com/sassy2711/Yoga_Pose_Corrector.git
+      ```
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/sassy2711/Yoga_Pose_Corrector.git
-   ```
-
-2. **Install Python dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+   2. **Install Python dependencies**:
+      ```bash
+      pip install -r requirements.txt
+      ```
    
-3. **Navigate into project directory**:
-   ```bash
-   cd Yoga_Pose_Corrector
-   ```
+   3. **Navigate into project directory**:
+      ```bash
+      cd Yoga_Pose_Corrector
+      ```
 
-4. **Running the backend**:
-   ```bash
-   cd backend
-   python main.py
-   ```
+   4. **Running the backend**:
+      ```bash
+      cd backend
+      python main.py
+      ```
+   
+   **Frontend**
+   
 
-   (For a Flutter app, follow the build instructions in the `flutter_app/` directory.)
+## Usage 
+This version works only when you are standing to your right. That means that, when you are standing in front of the camera, you should turn towards your right and then it will work. This was done because it is hard to detect the landmark points for most poses when we are facing the camera from the front. The functionality could easily be implemented when you turn towards your left also, but was not implemented due to time constraints. It will be implemented in an update very soon.
 
-## Usage
+   **Backend**
+   1. You will be given a menu with different asana names.
+   2. Type any name from the menu.
+   3. Go in front of the camera.
+   4. Turn to your right.
+   5. Make sure the points are being mapped properly and you are in the frame.
+   6. Do your yoga pose and enjoy audio feedback from the application.
+   7. Just press Ctrl-C on the terminal to end the application.
 
-1. Open the application.
-2. Follow the on-screen instructions to select a yoga pose.
-3. The application will start real-time pose detection and guide you through the correct posture.
-4. You'll receive audio feedback to adjust your pose.
+   **Frontend**
+   1. Open the application.
+   2. Select a yoga pose.
+   3. The application will start real-time pose detection and guide you through the correct posture.
+   4. You'll receive audio feedback to adjust your pose.
 
 ## Yoga Poses Supported
 
