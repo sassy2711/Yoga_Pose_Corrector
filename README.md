@@ -54,14 +54,15 @@ Ensure you have the following installed:
 
 ## Yoga Poses Supported
 
-- Prayer pose – Pranamasana
-- Raised arms pose – Hastauttanasana
-- Hand to foot pose – Hasta Padasana
-- Equestrian pose – Ashwa Sanchalanasana
-- Stick pose – Dandasana
-- Salute with eight points – Ashtanga Namaskara
-- Cobra pose – Bhujangasana
-- Downward facing dog pose - Adho Mukha Svanasana
+1. **Pranamasana (Prayer Pose)**
+2. **Hastauttanasana (Raised Arms Pose)**
+3. **Hastapadasana (Standing Forward Bend)**
+4. **Right Ashwa Sanchalanasana (Equestrian Pose - Right Leg)**
+5. **Left Ashwa Sanchalanasana (Equestrian Pose - Left Leg)**
+6. **Dandasana (Stick Pose)**
+7. **Ashtanga Namaskara (Eight-Limbed Pose)**
+8. **Bhujangasana (Cobra Pose)**
+9. **Adho Mukha Svanasana (Downward-Facing Dog Pose)**
 
 ## Usage 
 This version works only when you are standing to your right. That means that, when you are standing in front of the camera, you should turn towards your right and then it will work. This was done because it is hard to detect the landmark points for most poses when we are facing the camera from the front. The functionality could easily be implemented when you turn towards your left also, but was not implemented due to time constraints. It will be implemented in an update very soon.
@@ -76,10 +77,12 @@ This version works only when you are standing to your right. That means that, wh
    7. Just press Ctrl-C on the terminal to end the application.
 
    **Frontend**
-   1. Open the application.
-   2. Select a yoga pose.
-   3. The application will start real-time pose detection and guide you through the correct posture.
-   4. You'll receive audio feedback to adjust your pose.
+   1. Run the server.
+   2. Open the application.
+   3. Select a yoga pose.
+   4. The application will start a camera.
+   5. Try to do the pose you've chosen within the frame.
+   6. You'll receive text feedback on whether your pose is correct or not.
 
 # asana_images
 
@@ -93,17 +96,7 @@ These files list the nine selected yoga poses for which ideal body landmarks are
 
 ### Yoga Poses Included
 
-1. **Pranamasana (Prayer Pose)**
-2. **Hastauttanasana (Raised Arms Pose)**
-3. **Hastapadasana (Standing Forward Bend)**
-4. **Right Ashwa Sanchalanasana (Equestrian Pose - Right Leg)**
-5. **Left Ashwa Sanchalanasana (Equestrian Pose - Left Leg)**
-6. **Dandasana (Stick Pose)**
-7. **Ashtanga Namaskara (Eight-Limbed Pose)**
-8. **Bhujangasana (Cobra Pose)**
-9. **Adho Mukha Svanasana (Downward-Facing Dog Pose)**
-
-These poses are included with ideal 2D body landmark coordinates for posture analysis and detection tasks.
+The landmarks for the 9 poses mentioned are included with ideal 2D body landmark coordinates for posture analysis and detection tasks.
 
 
 ## PoseModule.py
