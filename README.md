@@ -90,9 +90,6 @@ This folder has images from the internet of people doing the asanas we chose. It
 ## ideal_landmarks_data.py & absolutely_ideal_landmarks_data.py
 
 These files list the nine selected yoga poses for which ideal body landmarks are provided as normalized 2D coordinates.
-
-### Yoga Poses Included
-
 The landmarks for the 9 poses mentioned are included with ideal 2D body landmark coordinates for posture analysis and detection tasks.
 
 
